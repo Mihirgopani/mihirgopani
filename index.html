@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mihir | Full-Stack Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="data.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#05070F',
+                        darkcard: '#0B0F19',
+                        darkaccent: '#1E293B',
+                        accentCyan: '#06B6D4',
+                        accentOrange: '#F97316',
+                    },
+                    animation: {
+                        'marquee-speed': 'marquee 20s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .glow-cyan:hover { box-shadow: 0 0 30px rgba(6, 182, 212, 0.35); }
+        .glow-orange:hover { box-shadow: 0 0 30px rgba(249, 115, 22, 0.35); }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-100 font-sans antialiased selection:bg-accentOrange selection:text-white"
+      x-data="{ 
+        currentPage: 'home', 
+        selectedTechFilter: 'All',
+        selectedProject: null,
+        showFloatingBanner: true,
+        projects: portfolioData.projects
+      }">
+
+    <div x-show="showFloatingBanner" x-transition class="relative z-50 bg-gradient-to-r from-accentOrange to-accentCyan text-darkbg font-bold py-2.5 px-4 text-center text-xs md:text-sm flex items-center justify-center gap-2">
+        <span>🚀 Currently scheduling new dashboard architectures and native cross-platform mobile app contracts. Let's build!</span>
+        <button @click="showFloatingBanner = false" class="bg-darkbg/20 hover:bg-darkbg/40 text-darkbg rounded-full p-1 leading-none text-xs absolute right-4">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <nav class="sticky top-0 z-40 bg-darkbg/85 backdrop-blur-md border-b border-slate-900">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-2 cursor-pointer" @click="currentPage = 'home'; selectedProject = null; window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <span class="text-2xl font-black tracking-wider text-accentOrange">MIHIR<span class="text-accentCyan">.</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 font-medium text-sm">
+                    <button @click="currentPage = 'home'; selectedProject = null" :class="currentPage === 'home' ? 'text-accentCyan' : 'text-gray-400 hover:text-white'" class="transition-colors">Home</button>
+                    <button @click="currentPage = 'about'" :class="currentPage === 'about' ? 'text-accentCyan' : 'text-gray-400 hover:text-white'" class="transition-colors">About</button>
+                    <button @click="currentPage = 'portfolio-listing'; selectedProject = null" :class="currentPage === 'portfolio-listing' ? 'text-accentCyan' : 'text-gray-400 hover:text-white'" class="transition-colors">All Projects</button>
+                    <button @click="currentPage = 'home'; selectedProject = null; setTimeout(() => document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' }), 100)" class="text-gray-400 hover:text-white transition-colors">Contact</button>
+                </div>
+                <div class="md:hidden flex items-center" x-data="{ open: false }">
+                    <button @click="open = !open" class="text-gray-400 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div x-show="open" @click.away="open = false" x-cloak class="absolute top-16 right-4 w-48 bg-darkcard border border-slate-800 rounded-lg shadow-xl py-2 flex flex-col space-y-2 px-4 z-50">
+                        <button @click="currentPage = 'home'; selectedProject = null; open = false" class="text-left py-1 text-gray-300 hover:text-accentCyan">Home</button>
+                        <button @click="currentPage = 'about'; open = false" class="text-left py-1 text-gray-300 hover:text-accentCyan">About</button>
+                        <button @click="currentPage = 'portfolio-listing'; selectedProject = null; open = false" class="text-left py-1 text-gray-300 hover:text-accentCyan">All Projects</button>
+                        <button @click="currentPage = 'home'; open = false; setTimeout(() => document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' }), 100)" class="text-left py-1 text-gray-300 hover:text-accentCyan">Contact</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="relative z-10">
+
+        <div x-show="currentPage === 'home'" x-transition:enter="transition ease-out duration-400" class="space-y-32 pb-24">
+            
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[65vh] flex flex-col md:flex-row items-center justify-center gap-12 pt-12">
+                <div class="max-w-2xl space-y-6 text-center md:text-left flex-1">
+                    <div class="inline-flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-xs text-accentCyan">
+                        <span class="w-2 h-2 rounded-full bg-accentCyan animate-pulse"></span>
+                        <span>Multi-Tech Stack Solutions Engineer</span>
+                    </div>
+                    <h1 class="text-5xl sm:text-6xl font-black tracking-tight leading-[1.1]">
+                        High Profile Apps <br>& <span class="text-transparent bg-clip-text bg-gradient-to-r from-accentCyan to-accentOrange">Robust Dashboards</span>
+                    </h1>
+                    <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
+                        Hi, I am Mihir. A 24-year-old developer specializing in high-performance Android & iOS applications and enterprise-grade web automation.
+                    </p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
+                        <button @click="currentPage = 'portfolio-listing'; window.scrollTo({top:0})" class="px-8 py-3.5 bg-accentCyan hover:bg-cyan-600 text-darkbg font-bold rounded-xl transition-all transform hover:-translate-y-1 glow-cyan flex items-center text-xs tracking-wider uppercase">
+                            Explore Projects <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button @click="document.getElementById('contact-section').scrollIntoView({ behavior: 'smooth' })" class="px-8 py-3.5 border border-slate-700 hover:border-accentOrange hover:text-accentOrange font-medium rounded-xl transition-all transform hover:-translate-y-1 text-xs tracking-wider uppercase">
+                            Get In Touch
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full max-w-md bg-darkcard border border-slate-800 rounded-2xl p-5 shadow-2xl relative flex-1 hidden md:block">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 mb-4">
+                        <div class="flex space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
+                        </div>
+                        <span class="text-xs text-gray-500 font-mono">dashboard_architecture.json</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="h-12 bg-slate-950 rounded-xl border border-slate-800/80 flex items-center px-4 justify-between">
+                            <div class="w-1/3 h-2 bg-slate-800 rounded"></div>
+                            <span class="text-accentOrange text-xs font-mono">System Live</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="h-24 bg-slate-950/40 border border-slate-800/50 rounded-xl p-3 flex flex-col justify-between">
+                                <span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">App Compilations</span>
+                                <span class="text-lg font-extrabold text-accentCyan">iOS & Android</span>
+                            </div>
+                            <div class="h-24 bg-slate-950/40 border border-slate-800/50 rounded-xl p-3 flex flex-col justify-between">
+                                <span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Relational DBs</span>
+                                <span class="text-lg font-extrabold text-gray-300">MySQL/Postgres</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="w-full overflow-hidden bg-darkcard border-y border-slate-900 py-8 relative">
+                <div class="flex whitespace-nowrap animate-marquee-speed uppercase tracking-widest text-xs font-mono font-bold text-slate-600 gap-16">
+                    <span>⚡ Android & iOS Ecosystems</span>
+                    <span>⚡ Robust Admin Dashboards</span>
+                    <span>⚡ Enterprise Web Architectures</span>
+                    <span>⚡ Cross-Platform Mobile Apps</span>
+                    <span>⚡ Backend API Infrastructure</span>
+                    <span>⚡ Android & iOS Ecosystems</span>
+                    <span>⚡ Robust Admin Dashboards</span>
+                    <span>⚡ Enterprise Web Architectures</span>
+                    <span>⚡ Cross-Platform Mobile Apps</span>
+                    <span>⚡ Backend API Infrastructure</span>
+                </div>
+            </div>
+
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-gradient-to-br from-darkcard to-slate-950 border border-slate-800 rounded-3xl p-8 md:p-12 grid md:grid-cols-3 gap-8 items-center">
+                    <div class="space-y-2">
+                        <span class="text-xs uppercase tracking-widest font-mono text-accentOrange">Brief Introduction</span>
+                        <h2 class="text-3xl font-black">Meet <span class="text-accentCyan">Mihir</span></h2>
+                    </div>
+                    <div class="md:col-span-2 space-y-4 text-gray-400 text-base leading-relaxed">
+                        <p>
+                            I am a 24-year-old engineer working fluently across dynamic cross-platform languages and structural backend servers. My main focus is centered on delivering modern mobile frameworks for Android/iOS alongside expansive dashboard systems.
+                        </p>
+                        <button @click="currentPage = 'about'; window.scrollTo({top: 0})" class="text-sm text-accentCyan hover:text-cyan-400 font-bold inline-flex items-center group pt-2">
+                            View Redesigned Profile & Vision <i class="fa-solid fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="text-center max-w-xl mx-auto space-y-2">
+                    <h2 class="text-3xl font-black">Architectural <span class="text-accentOrange">Services</span></h2>
+                    <p class="text-gray-400 text-sm">Targeted capabilities engineered to bring specialized platforms to production scaling.</p>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-darkcard border border-slate-800/80 p-6 rounded-2xl space-y-4 hover:border-accentCyan/40 transition-colors group">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/40 border border-cyan-900/30 flex items-center justify-center text-accentCyan text-lg"><i class="fa-solid fa-globe"></i></div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-accentCyan transition-colors">Web Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Custom, semantic storefronts and dynamic websites optimized for clean rendering profiles and cross-device speed.</p>
+                    </div>
+                    <div class="bg-darkcard border border-slate-800/80 p-6 rounded-2xl space-y-4 hover:border-accentOrange/40 transition-colors group">
+                        <div class="w-12 h-12 rounded-xl bg-orange-950/40 border border-orange-900/30 flex items-center justify-center text-accentOrange text-lg"><i class="fa-solid fa-mobile-screen"></i></div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-accentOrange transition-colors">App Development</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Compilation of native performance components to target Android and iOS devices using Flutter and React Native.</p>
+                    </div>
+                    <div class="bg-darkcard border border-slate-800/80 p-6 rounded-2xl space-y-4 hover:border-accentCyan/40 transition-colors group">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/40 border border-cyan-900/30 flex items-center justify-center text-accentCyan text-lg"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-accentCyan transition-colors">Robust Dashboards</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Complex administrative platforms featuring advanced retention automation tools and structured monitoring charts.</p>
+                    </div>
+                    <div class="bg-darkcard border border-slate-800/80 p-6 rounded-2xl space-y-4 hover:border-accentOrange/40 transition-colors group">
+                        <div class="w-12 h-12 rounded-xl bg-orange-950/40 border border-orange-900/30 flex items-center justify-center text-accentOrange text-lg"><i class="fa-solid fa-database"></i></div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-accentOrange transition-colors">Backend & Database</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Relational schema design across PostgreSQL and MySQL linked with optimized application query parameters.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="flex items-end justify-between border-b border-slate-900 pb-4">
+                    <div>
+                        <h2 class="text-3xl font-black">Top <span class="text-accentCyan">Projects</span></h2>
+                        <p class="text-sm text-gray-400">Featured operational blueprints recently deployed.</p>
+                    </div>
+                    <button @click="currentPage = 'portfolio-listing'; window.scrollTo({top:0})" class="text-xs text-accentOrange hover:text-orange-400 font-bold tracking-wider uppercase">
+                        View All Projects <i class="fa-solid fa-angles-right ml-1"></i>
+                    </button>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <template x-for="project in projects.slice(0, 2)" :key="project.id">
+                        <div class="bg-darkcard border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group">
+                            <div class="relative h-48 bg-slate-950 overflow-hidden">
+                                <img :src="project.image" :alt="project.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80">
+                                <span class="absolute top-4 left-4 text-[10px] font-mono tracking-widest uppercase bg-darkbg/90 border border-slate-800 text-accentCyan px-2.5 py-1 rounded-md" x-text="project.category"></span>
+                            </div>
+                            <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                                <div class="space-y-2">
+                                    <h3 class="text-xl font-bold text-white group-hover:text-accentCyan transition-colors" x-text="project.title"></h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed" x-text="project.desc"></p>
+                                </div>
+                                <div class="pt-4 flex justify-end border-t border-slate-900 mt-4">
+                                    <button @click="selectedProject = project; currentPage = 'project-details'; window.scrollTo({top:0})" class="text-xs font-bold text-accentOrange hover:text-orange-400 flex items-center">
+                                        Analyze Details <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+                <div class="text-center max-w-sm mx-auto">
+                    <h2 class="text-2xl font-black tracking-tight">Core Commitments</h2>
+                    <div class="w-12 h-1 bg-accentOrange mx-auto mt-2 rounded"></div>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-darkcard/40 border border-slate-900 p-6 rounded-xl space-y-2">
+                        <div class="text-xs font-mono text-accentCyan font-bold">01 / DASHBOARDS</div>
+                        <p class="text-xs text-gray-400 leading-relaxed">Structuring deep management platforms with fast input methods.</p>
+                    </div>
+                    <div class="bg-darkcard/40 border border-slate-900 p-6 rounded-xl space-y-2">
+                        <div class="text-xs font-mono text-accentOrange font-bold">02 / OS PARITY</div>
+                        <p class="text-xs text-gray-400 leading-relaxed">Compiling smooth native actions across Android and iOS targets.</p>
+                    </div>
+                    <div class="bg-darkcard/40 border border-slate-900 p-6 rounded-xl space-y-2">
+                        <div class="text-xs font-mono text-accentCyan font-bold">03 / CLEAN PATTERENS</div>
+                        <p class="text-xs text-gray-400 leading-relaxed">Enforcing strict model routing logic blueprints consistently.</p>
+                    </div>
+                    <div class="bg-darkcard/40 border border-slate-900 p-6 rounded-xl space-y-2">
+                        <div class="text-xs font-mono text-accentOrange font-bold">04 / RELATIONAL DB</div>
+                        <p class="text-xs text-gray-400 leading-relaxed">Designing database schemas carefully to assure query velocity.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="border-b border-slate-900 pb-4 text-center md:text-left">
+                    <h2 class="text-3xl font-black">Core <span class="text-accentOrange">Ecosystems</span></h2>
+                    <p class="text-gray-400 text-sm mt-1">Technologies integrated into active production pipelines.</p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3.5">
+                    <template x-for="tech in ['HTML', 'CSS', 'JS', 'Jquery', 'Php', 'Wordpress', 'React', 'Magento', 'Flutter', 'Node.js', 'Laravel']">
+                        <div @click="currentPage = 'portfolio-listing'; selectedTechFilter = tech; window.scrollTo({top:0})" 
+                             class="bg-darkcard border border-slate-900 p-3.5 rounded-xl flex items-center justify-center space-x-2.5 cursor-pointer hover:border-accentCyan/40 transition-colors group">
+                            <span class="text-xs font-mono font-bold text-gray-300 group-hover:text-accentCyan transition-colors" x-text="tech"></span>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
+            <section id="contact-section" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-darkcard border border-slate-900 p-8 rounded-3xl max-w-2xl mx-auto space-y-6"
+         x-data="{ 
+            formStatus: 'idle', 
+            formData: { name: '', email: '', phone: '', service: '', subject: '', message: '' },
+            async submitForm() {
+                this.formStatus = 'sending';
+                try {
+                    const response = await fetch('/api/send-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.formData)
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        this.formStatus = 'success';
+                        this.formData = { name: '', email: '', phone: '', service: '', subject: '', message: '' }; // Reset fields
+                    } else {
+                        this.formStatus = 'error';
+                    }
+                } catch (err) {
+                    this.formStatus = 'error';
+                }
+            }
+         }">
+        
+        <div class="text-center space-y-1">
+            <h2 class="text-2xl font-black">Initiate <span class="text-accentOrange">Transmission</span></h2>
+            <p class="text-xs text-gray-400">Specify requirements regarding application scaling or metrics tracking frameworks.</p>
+        </div>
+
+        <div x-show="formStatus === 'success'" x-cloak class="p-4 bg-green-950/40 border border-green-900/50 rounded-xl text-xs text-green-400 font-medium">
+            ✅ Message parsed and successfully routed to Mihir's inbox framework pipelines!
+        </div>
+        <div x-show="formStatus === 'error'" x-cloak class="p-4 bg-red-950/40 border border-red-900/50 rounded-xl text-xs text-red-400 font-medium">
+            ❌ Transmission architecture error. Please check validation metrics payload parameter paths.
+        </div>
+
+        <form @submit.prevent="submitForm()" class="space-y-4" x-show="formStatus !== 'success'">
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-[11px] font-mono text-gray-500 uppercase tracking-wider">Identity Name</label>
+                    <input type="text" x-model="formData.name" required class="w-full bg-darkbg border border-slate-800 focus:border-accentCyan focus:outline-none rounded-lg px-3.5 py-2 text-sm text-gray-200">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[11px] font-mono text-gray-500 uppercase tracking-wider">Email Coordinate</label>
+                    <input type="email" x-model="formData.email" required class="w-full bg-darkbg border border-slate-800 focus:border-accentCyan focus:outline-none rounded-lg px-3.5 py-2 text-sm text-gray-200">
+                </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-[11px] font-mono text-gray-500 uppercase tracking-wider">Phone Number</label>
+                    <input type="tel" x-model="formData.phone" required placeholder="+91 00000-00000" class="w-full bg-darkbg border border-slate-800 focus:border-accentCyan focus:outline-none rounded-lg px-3.5 py-2 text-sm text-gray-200">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[11px] font-mono text-gray-500 uppercase tracking-wider">Target Service</label>
+                    <select x-model="formData.service" required class="w-full bg-darkbg border border-slate-800 focus:border-accentCyan focus:outline-none rounded-lg px-3.5 py-2 text-sm text-gray-400">
+                        <option value="">Select Domain...</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="App Development">App Development</option>
+                        <option value="Robust Dashboards">Robust Dashboards</option>
+                        <option value="Backend & Database">Backend & Database</option>
+                    </select>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="text-[11px] font-mono text-gray-500 uppercase tracking-wider">Project Subject</label>
+                <input type="text" x-model="formData.subject" required class="w-full bg-darkbg border border-slate-800 focus:border-accentCyan focus:outline-none rounded-lg px-3.5 py-2 text-sm text-gray-200">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[11px] font-mono text-gray-500 uppercase tracking-wider">Payload Description</label>
+                <textarea rows="4" x-model="formData.message" required class="w-full bg-darkbg border border-slate-800 focus:border-accentCyan focus:outline-none rounded-lg px-3.5 py-2 text-sm text-gray-200"></textarea>
+            </div>
+            <button type="submit" :disabled="formStatus === 'sending'" class="w-full py-3 bg-accentOrange hover:bg-orange-600 disabled:bg-slate-800 text-white font-bold rounded-lg transition-all text-sm tracking-wider uppercase glow-orange flex items-center justify-center">
+                <span x-show="formStatus !== 'sending'">Transmit Inquiry <i class="fa-solid fa-paper-plane ml-2 text-xs"></i></span>
+                <span x-show="formStatus === 'sending'" x-cloak><i class="fa-solid fa-gear animate-spin mr-2"></i> Transmitting Payload...</span>
+            </button>
+        </form>
+    </div>
+</section>
+        </div>
+
+        <div x-show="currentPage === 'about'" x-transition:enter="transition ease-out duration-400" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24" x-cloak>
+            <section class="relative rounded-3xl overflow-hidden bg-slate-950 border border-slate-900 p-8 md:p-16 flex flex-col justify-center min-h-[40vh]">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_120%,#f9731615,transparent_50%)]"></div>
+                <div class="max-w-xl space-y-4 relative z-10">
+                    <span class="text-xs font-mono uppercase tracking-widest text-accentCyan">Profile Document</span>
+                    <h1 class="text-4xl sm:text-5xl font-black tracking-tight leading-tight">Engineering Scalable Software Solutions</h1>
+                    <p class="text-gray-400 text-base leading-relaxed">An overview of technical execution strategies, active framework competencies, and underlying architectural principles.</p>
+                </div>
+            </section>
+
+            <section class="grid md:grid-cols-12 gap-8 items-start">
+                <div class="md:col-span-4 bg-darkcard border border-slate-900 p-6 rounded-2xl space-y-4">
+                    <h3 class="text-xs font-mono uppercase text-slate-500 tracking-wider">Developer Context</h3>
+                    <div class="space-y-3 text-xs font-mono">
+                        <div class="flex justify-between border-b border-slate-900 pb-2"><span class="text-gray-500">Identity:</span> <span class="text-gray-200 font-bold">Mihir</span></div>
+                        <div class="flex justify-between border-b border-slate-900 pb-2"><span class="text-gray-500">Age Metrics:</span> <span class="text-accentOrange font-bold">24 Years</span></div>
+                        <div class="flex justify-between border-b border-slate-900 pb-2"><span class="text-gray-500">Target Core:</span> <span class="text-accentCyan font-bold">Mobile & Admin Panels</span></div>
+                    </div>
+                </div>
+                <div class="md:col-span-8 space-y-8">
+                    <div class="space-y-4">
+                        <h2 class="text-2xl font-black text-white">About Developer</h2>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            I am Mihir, a 24-year-old engineer working efficiently across diverse technical frameworks. My primary focus is centered on compiling clean mobile applications for both Android and iOS targets alongside robust backend web systems.
+                        </p>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            I love working on dashboard-heavy projects. I thrive on translating extensive data models, configuration rules, and specialized administrative panels into high-performance, predictable management environments.
+                        </p>
+                    </div>
+                    <div class="space-y-3 pt-4 border-t border-slate-900">
+                        <h3 class="text-xl font-bold text-accentOrange">The Vision</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            My goal is to simplify data interactions between database endpoints and dynamic client application displays. By maintaining standardized routing rules, clean data normalization practices, and straightforward layouts, I build solutions that provide real-world business value.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div x-show="currentPage === 'portfolio-listing'" x-transition:enter="transition ease-out duration-400" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12" x-cloak>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b border-slate-900 pb-6">
+                <div>
+                    <h1 class="text-3xl font-black">Project <span class="text-accentCyan">Showcase</span></h1>
+                    <p class="text-gray-400 text-xs mt-1">Filter dynamically across the ecosystem layers to inspect architectural variants.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-900 self-start">
+                    <template x-for="techOption in ['All', 'Laravel', 'React Native', 'Flutter', 'Wordpress', 'Node.js']">
+                        <button @click="selectedTechFilter = techOption"
+                                :class="selectedTechFilter === techOption ? 'bg-accentOrange text-white' : 'text-gray-400 hover:text-white'"
+                                class="px-3 py-1 text-xs font-semibold rounded-lg transition-all"
+                                x-text="techOption">
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <template x-for="project in projects" :key="project.id">
+                    <div x-show="selectedTechFilter === 'All' || project.tech === selectedTechFilter || project.tools.includes(selectedTechFilter)"
+                         class="bg-darkcard border border-slate-900 rounded-2xl overflow-hidden flex flex-col justify-between group">
+                        <div class="relative h-56 bg-slate-950 overflow-hidden">
+                            <img :src="project.image" :alt="project.title" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500 opacity-75">
+                            <span class="absolute top-4 left-4 text-[10px] font-mono tracking-widest uppercase bg-darkbg/90 border border-slate-800 text-accentCyan px-3 py-1 rounded" x-text="project.category"></span>
+                        </div>
+                        <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <h3 class="text-xl font-bold text-white group-hover:text-accentCyan transition-colors" x-text="project.title"></h3>
+                                <p class="text-xs text-gray-400 leading-relaxed" x-text="project.desc"></p>
+                                <div class="flex flex-wrap gap-1 pt-2">
+                                    <template x-for="tool in project.tools">
+                                        <span class="text-[10px] font-mono bg-slate-900 border border-slate-800 text-gray-400 px-2 py-0.5 rounded" x-text="tool"></span>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-slate-900 mt-4 flex justify-end">
+                                <button @click="selectedProject = project; currentPage = 'project-details'; window.scrollTo({top:0})" class="text-xs font-bold text-accentOrange hover:text-orange-400 flex items-center">
+                                    Analyze System Details <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-show="currentPage === 'project-details'" x-transition:enter="transition ease-out duration-400" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-6" x-cloak>
+            <button @click="currentPage = 'portfolio-listing'; selectedProject = null" class="inline-flex items-center text-xs font-mono text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-chevron-left mr-1.5"></i> Return to Showcase Grid
+            </button>
+
+            <template x-if="selectedProject">
+                <div class="bg-darkcard border border-slate-900 rounded-3xl overflow-hidden shadow-2xl space-y-6">
+                    <div class="h-64 sm:h-80 bg-slate-950 relative">
+                        <img :src="selectedProject.image" :alt="selectedProject.title" class="w-full h-full object-cover opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkcard to-transparent"></div>
+                    </div>
+                    <div class="p-6 md:p-8 space-y-6">
+                        <div class="border-b border-slate-900 pb-4 space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-mono text-accentOrange bg-orange-950/40 px-2.5 py-0.5 rounded border border-orange-900/30" x-text="selectedProject.category"></span>
+                                <span class="text-xs text-gray-500 font-mono" x-text="'Primary: ' + selectedProject.tech"></span>
+                            </div>
+                            <h2 class="text-2xl md:text-3xl font-black text-white" x-text="selectedProject.title"></h2>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="md:col-span-2 space-y-4">
+                                <h4 class="text-sm font-mono uppercase text-gray-400 tracking-wider">Technical Implementation Summary</h4>
+                                <p class="text-sm text-gray-300 leading-relaxed whitespace-pre-line" x-text="selectedProject.longDesc"></p>
+                            </div>
+                            <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-900 h-fit space-y-3">
+                                <h5 class="text-[10px] font-mono uppercase tracking-wider text-gray-500">Environment Blueprint</h5>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <template x-for="tool in selectedProject.tools">
+                                        <span class="text-[10px] font-mono bg-darkbg text-gray-300 px-2.5 py-1 rounded border border-slate-900" x-text="tool"></span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </nav>
+
+    <footer class="border-t border-slate-900 bg-darkcard/20 py-8 text-center text-xs text-gray-500">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 Mihir. All engineering architectures reserved.</p>
+            <div class="flex space-x-4 text-sm">
+                <a href="#" class="hover:text-accentCyan transition-colors"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-accentCyan transition-colors"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
