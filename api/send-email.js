@@ -17,12 +17,14 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Missing required validation data payload parameters.' });
     }
 
-    // Configure Gmail SMTP transporter
+    // Hostinger SMTP transporter
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.hostinger.com',
+        port: 465,
+        secure: true, // SSL
         auth: {
-            user: 'techtically.official@gmail.com',
-            pass: 'mmtw bmdg vkpc ivll'  // Gmail App Password (16-digit)
+            user: 'info@discountsdeveloper.com',
+            pass: 'jFL|F2K4s&'
         }
     });
 
@@ -42,8 +44,8 @@ module.exports = async function handler(req, res) {
 
     try {
         await transporter.sendMail({
-            from: '"Portfolio Automation" <techtically.official@gmail.com>',  // Must match auth.user
-            to: 'mihirm2m3m5@gmail.com',
+            from: '"Discounts Developer" <info@discountsdeveloper.com>',
+            to: 'info.discountsdeveloper@gmail.com',
             subject: `💼 Portfolio Contact: ${e(subject)}`,
             html: emailHtmlContent,
             replyTo: email
